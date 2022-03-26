@@ -37,157 +37,179 @@ static volatile uint16_t tstart_us;
 static volatile uint16_t tstop_us;
 static void irqHandlerStart()
 {
-    if (not(tstart_us))
-    {
-        tstart_us = micros();
+  if (not(tstart_us))
+  {
+    tstart_us = micros();
 #ifdef PIN_DEBUG1
-        digitalWrite(PIN_DEBUG1, HIGH);
+    digitalWrite(PIN_DEBUG1, HIGH);
 #endif
-    }
+  }
 }
 static void irqHandlerStop()
 {
-    if (not(tstop_us))
-    {
-        tstop_us = micros();
+  if (not(tstop_us))
+  {
+    tstop_us = micros();
 #ifdef PIN_DEBUG2
-        digitalWrite(PIN_DEBUG2, HIGH);
+    digitalWrite(PIN_DEBUG2, HIGH);
 #endif
-    }
+  }
 }
 
 void setup()
 {
-    Serial.begin(115200);
-    Serial.println(F("-- Starting TDC1000 test --"));
-    pinMode(Enable, OUTPUT);
-    while (not usafe.begin())
-    {
-        Serial.println(F("Failed to init TDC1000"));
-        delay(1000);
-    }
-    Serial.println(F("TDC1000 init OK"));
-    digitalWrite(Enable, HIGH);
-    bool ok = true;
-    ok &= usafe.setTriggerEdge(false);
-    ok &= usafe.setTx(TDC1000_CLKIN_FREQ_DIV, 6 /*pulses*/, 31 /*shift*/, true /*damping*/);
-    ok &= usafe.setRx(false /*multiEcho*/);
-    ok &= usafe.setRxSensitivity(TDC1000::RxDacEchoThreshold::m35mV, TDC1000::RxPgaGain::g21dB, TDC1000:: RxLnaFbMode::capacitive );
-    ok &= usafe.setRepeat(TDC1000::TxRxCycles::x1, 1/*expected pulses*/);
-    ok &= usafe.setTofMeasuementShort(TDC1000::T0::ClkInDiv1, TDC1000::TxAutoZeroPeriod::T0x64,
-                                    TDC1000::TxBlankPeriod::T0x16, TDC1000::TxEchoTimeoutPeriod::disabled);
-   ok &= usafe.setMeasureTOF(TDC1000::TxRxChannel::Channel1, TDC1000::TofMode::Mode0);
-   // ok &= usafe.setMeasureTemp(TDC1000::TempMode::REF_RTD1, TDC1000::TempRtdSel::PT1000,TDC1000::TempClkDiv::useTX_FREQ_DIV);
-    usafe.dumpSettings(TDC1000_CLKIN_FREQ_HZ);
-    usafe.spiWriteReg8(0x06,0x30);
-    usafe.spiWriteReg8(0x08,0xc);
+  Serial.begin(115200);
+  Serial.println(F("-- Starting TDC1000 test --"));
+  pinMode(Enable, OUTPUT);
+  while (not usafe.begin())
+  {
+    Serial.println(F("Failed to init TDC1000"));
+    delay(1000);
+  }
+  Serial.println(F("TDC1000 init OK"));
+  digitalWrite(Enable, HIGH);
+  bool ok = true;
+  ok &= usafe.setTriggerEdge(false);
+  ok &= usafe.setTx(TDC1000_CLKIN_FREQ_DIV, 5/*pulses*/, 3/*shift*/, true /*damping*/);
+  ok &= usafe.setRx(false /*multiEcho*/);
+  ok &= usafe.setRxSensitivity(TDC1000::RxDacEchoThreshold::m125mV, TDC1000::RxPgaGain::g21dB, TDC1000:: RxLnaFbMode::capacitive );
+  ok &= usafe.setRepeat(TDC1000::TxRxCycles::x1, 1/*expected pulses*/);
+  //    ok &= usafe.setTofMeasuementShort(TDC1000::T0::ClkInDiv1, TDC1000::TxAutoZeroPeriod::T0x64,
+  //                                    TDC1000::TxBlankPeriod::T0x16, TDC1000::TxEchoTimeoutPeriod::disabled);
+  ok &= usafe.setTofMeasuementStandard(TDC1000::T0::ClkInDiv1, TDC1000::TxAutoZeroPeriod::T0x64, TDC1000::TxEchoTimeoutPeriod::disabled, 30, true);
+  //TDC1000::timingReg::,TDC1000::blanking::
+  ok &= usafe.setMeasureTOF(TDC1000::TxRxChannel::Channel1, TDC1000::TofMode::Mode0);
+  // ok &= usafe.setMeasureTemp(TDC1000::TempMode::REF_RTD1, TDC1000::TempRtdSel::PT1000,TDC1000::TempClkDiv::useTX_FREQ_DIV);
+  usafe.dumpSettings(TDC1000_CLKIN_FREQ_HZ);
+  //#define TDC1000_REG_ADR_CONFIG_0                          (0x00u)
+  //#define TDC1000_REG_ADR_CONFIG_1                          (0x01u)
+  //#define TDC1000_REG_ADR_CONFIG_2                          (0x02u)
+  //#define TDC1000_REG_ADR_CONFIG_3                          (0x03u)
+  //#define TDC1000_REG_ADR_CONFIG_4                          (0x04u)
+  //#define TDC1000_REG_ADR_TOF_1                             (0x05u)
+  //#define TDC1000_REG_ADR_TOF_0                             (0x06u)
+  //#define TDC1000_REG_ADR_ERROR_FLAGS                       (0x07u)
+  //#define TDC1000_REG_ADR_TIMEOUT                           (0x08u)
+  //#define TDC1000_REG_ADR_CLOCK_RATE                        (0x09u)
+  //    usafe.spiWriteReg8(0x00u,0b01000101);
+  //    usafe.spiWriteReg8(0x01u,0b01000001);
+  //    usafe.spiWriteReg8(0x02u,0b00100000);
+  //    usafe.spiWriteReg8(0x03u,0b01010000);
+  //    usafe.spiWriteReg8(0x04u,0b00011111);
+  //    usafe.spiWriteReg8(0x05u,0b11100100);
+  //    usafe.spiWriteReg8(0x06u,0b00011111);
+  //    usafe.spiWriteReg8(0x07u,0b00000000);
+  //    usafe.spiWriteReg8(0x08u,0b00011101);//timeout
+  //    usafe.spiWriteReg8(0x09u,0b00000000);
+  //    usafe.spiWriteReg8(0x06,0x30);
+  //    usafe.spiWriteReg8(0x08,0xc);
 
-    if (not ok)
-    {
-        Serial.println(F("Failed to configure TDC1000"));
-        while(1) {};
-    }
+  if (not ok)
+  {
+    Serial.println(F("Failed to configure TDC1000"));
+    while (1) {};
+  }
 
-    pinMode(PIN_TDC1000_START, INPUT);
-    pinMode(PIN_TDC1000_STOP, INPUT);
+  pinMode(PIN_TDC1000_START, INPUT);
+  pinMode(PIN_TDC1000_STOP, INPUT);
 
-    digitalWrite(PIN_TDC1000_TRIGGER, LOW);
-    pinMode(PIN_TDC1000_TRIGGER, OUTPUT);
+  digitalWrite(PIN_TDC1000_TRIGGER, LOW);
+  pinMode(PIN_TDC1000_TRIGGER, OUTPUT);
 
-//    digitalWrite(PIN_TDC1000_CHSEL, LOW);
-//    pinMode(PIN_TDC1000_CHSEL, OUTPUT);
+  //    digitalWrite(PIN_TDC1000_CHSEL, LOW);
+  //    pinMode(PIN_TDC1000_CHSEL, OUTPUT);
 
-//    pinMode(PIN_TDC1000_ERRB, INPUT_PULLUP);    // open drain, active low
+  //    pinMode(PIN_TDC1000_ERRB, INPUT_PULLUP);    // open drain, active low
 
 #ifdef USE_SI5351
-    while (not si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0))
-    {
-        Serial.println(F("Failed to init Si5351"));
-        delay(1000);
-    }
+  while (not si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0))
+  {
+    Serial.println(F("Failed to init Si5351"));
+    delay(1000);
+  }
 
-    // Set CLK0 to output TDC1000_CLKIN_FREQ_HZ
-    si5351.set_freq(TDC1000_CLKIN_FREQ_HZ * SI5351_FREQ_MULT, SI5351_CLK0);
+  // Set CLK0 to output TDC1000_CLKIN_FREQ_HZ
+  si5351.set_freq(TDC1000_CLKIN_FREQ_HZ * SI5351_FREQ_MULT, SI5351_CLK0);
 
-    // Query a status update and wait a bit to let the Si5351 populate the
-    // status flags correctly.
-    si5351.update_status();
-    delay(500);
+  // Query a status update and wait a bit to let the Si5351 populate the
+  // status flags correctly.
+  si5351.update_status();
+  delay(500);
 
-    si5351.update_status();
-    Serial.print("SYS_INIT: ");
-    Serial.print(si5351.dev_status.SYS_INIT);
-    Serial.print("  LOL_A: ");
-    Serial.print(si5351.dev_status.LOL_A);
-    Serial.print("  LOL_B: ");
-    Serial.print(si5351.dev_status.LOL_B);
-    Serial.print("  LOS: ");
-    Serial.print(si5351.dev_status.LOS);
-    Serial.print("  REVID: ");
-    Serial.println(si5351.dev_status.REVID);
+  si5351.update_status();
+  Serial.print("SYS_INIT: ");
+  Serial.print(si5351.dev_status.SYS_INIT);
+  Serial.print("  LOL_A: ");
+  Serial.print(si5351.dev_status.LOL_A);
+  Serial.print("  LOL_B: ");
+  Serial.print(si5351.dev_status.LOL_B);
+  Serial.print("  LOS: ");
+  Serial.print(si5351.dev_status.LOS);
+  Serial.print("  REVID: ");
+  Serial.println(si5351.dev_status.REVID);
 #else
-    // Configure PWM to generate a pulse train of TDC1000_CLKIN_FREQ_HZ [Hz]
-    // which is to be used as TDC1000 CLKIN.
-    Timer1.initialize(PWM_CYCLE_US);
-    Timer1.pwm(PIN_TDC1000_CLKIN, 1023);
-    Timer1.setPwmDuty(PIN_TDC1000_CLKIN, 512);
+  // Configure PWM to generate a pulse train of TDC1000_CLKIN_FREQ_HZ [Hz]
+  // which is to be used as TDC1000 CLKIN.
+  Timer1.initialize(PWM_CYCLE_US);
+  Timer1.pwm(PIN_TDC1000_CLKIN, 1023);
+  Timer1.setPwmDuty(PIN_TDC1000_CLKIN, 512);
 #endif
 
 #ifdef PIN_DEBUG1
-    pinMode(PIN_DEBUG1, OUTPUT);
+  pinMode(PIN_DEBUG1, OUTPUT);
 #endif
 #ifdef PIN_DEBUG2
-    pinMode(PIN_DEBUG2, OUTPUT);
+  pinMode(PIN_DEBUG2, OUTPUT);
 #endif
-    attachInterrupt(digitalPinToInterrupt(PIN_TDC1000_START), irqHandlerStart, RISING);
-    attachInterrupt(digitalPinToInterrupt(PIN_TDC1000_STOP),  irqHandlerStop,  RISING);
+  attachInterrupt(digitalPinToInterrupt(PIN_TDC1000_START), irqHandlerStart, RISING);
+  attachInterrupt(digitalPinToInterrupt(PIN_TDC1000_STOP),  irqHandlerStop,  RISING);
 }
 
 inline uint16_t elapsedMicros(const uint16_t start_us)
 {
-    return uint16_t(micros()) - start_us;
+  return uint16_t(micros()) - start_us;
 }
 
 
 void loop()
 {
-    tstart_us = 0u;
-    tstop_us  = 0u;
+  tstart_us = 0u;
+  tstop_us  = 0u;
 
-    usafe.clearErrorFlags();
-    usafe.resetStatemachine();
+  usafe.clearErrorFlags();
+  usafe.resetStatemachine();
 
-    // Trigger new measurement
-    digitalWrite(PIN_TDC1000_TRIGGER, HIGH);
-    digitalWrite(PIN_TDC1000_TRIGGER, LOW);
+  // Trigger new measurement
+  digitalWrite(PIN_TDC1000_TRIGGER, HIGH);
+  digitalWrite(PIN_TDC1000_TRIGGER, LOW);
 
-    bool timeout = false;
-    unsigned long tstart = micros();
-    for (;;)
+  bool timeout = false;
+  unsigned long tstart = micros();
+  for (;;)
+  {
+    if (tstop_us) break;
+    if (micros() - tstart > 5000u)
     {
-        if (tstop_us) break;
-        if (micros() - tstart > 5000u)
-        {
-            timeout = true;
-            break;
-        }
+      timeout = true;
+      break;
     }
+  }
 #ifdef PIN_DEBUG1
-    digitalWrite(PIN_DEBUG1, LOW);
+  digitalWrite(PIN_DEBUG1, LOW);
 #endif
 #ifdef PIN_DEBUG2
-    digitalWrite(PIN_DEBUG2, LOW);
+  digitalWrite(PIN_DEBUG2, LOW);
 #endif
 
-    bool sigWeak, noSig, sigHigh;
-    usafe.getErrorFlags(sigWeak, noSig, sigHigh);
+  bool sigWeak, noSig, sigHigh;
+  usafe.getErrorFlags(sigWeak, noSig, sigHigh);
 
-    if (timeout) Serial.print(F("timeout "));
-    if (sigWeak) Serial.print(F("sigweak "));
-    if (noSig)   Serial.print(F("nosig "));
-    if (sigHigh) Serial.print(F("sighigh "));
+  if (timeout) Serial.print(F("timeout "));
+  if (sigWeak) Serial.print(F("sigweak "));
+  if (noSig)   Serial.print(F("nosig "));
+  if (sigHigh) Serial.print(F("sighigh "));
 
-    Serial.println(tstop_us - tstart_us);
-delay(1000);
-    
+  Serial.println(tstop_us - tstart_us);
+  delay(1000);
+
 }
