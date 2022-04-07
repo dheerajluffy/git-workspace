@@ -7,12 +7,12 @@ crcCheck = False
 openCheck = False
 class TOFSerial(object):
     def setupSerial(self,port : str, baudrate: int): #call once
-        self.ser = serial.Serial(port, baudrate, timeout=0)
+        self.ser = serial.Serial(port, baudrate)
     
     def startSerial(self , buffer : int): #call in interverl
         global dec
         self.s = self.ser.readline(buffer).decode('ascii')
-        time.sleep(1)
+        #time.sleep(1)
         data = str(self.s)
         if self.ser.is_open:
             openCheck = True 

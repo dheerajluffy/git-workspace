@@ -177,3 +177,4 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+#TOF1 =(TIME1)(normLSB)+(CLOCK _ COUNT1)(CLOCKperiod) -(TIME2)(normLSB)
