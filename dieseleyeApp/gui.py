@@ -103,7 +103,7 @@ class Ui_MainWindow(object):
         # self.progressBar.setProperty("value", 24)
         # self.progressBar.setObjectName("progressBar")     
         self.qtimer = QTimer()
-        self.qtimer.setInterval(1000)
+        self.qtimer.setInterval(500)
         self.qtimer.timeout.connect(self.updateData)
         self.qtimer.start()
 
