@@ -170,12 +170,15 @@ void begin() {
 void loop() {
   begin(); //Start new measurement by writing to tdc7200 spi registers
   SPI.beginTransaction(SPISettings(SPIfrequency, MSBFIRST, SPI_MODE3));
- // measure(10);
+  //tdc1000configRead(); //uncomment to print reg config of tdc1000
+  //tdc7200configRead(); //uncomment to print reg config of tdc7200
+ // measure(10); //uncoment to print Tof parameters
   claculateTof();
-  mpu6050.update();
-  Serial.print("angleX : ");
-  Serial.print(mpu6050.getAngleX());
-  delay(500);
+  i2cRead();
+  // mpu6050.update();
+  // Serial.print("angleX : ");
+  // Serial.print(mpu6050.getAngleX());
+  // delay(500);
 }
 
 void measure( int calibPeriod ) {
@@ -390,4 +393,43 @@ static void ui64toa(uint64_t v, char * buf, uint8_t base)
     buf[i] = buf[j];
     buf[j] = c;
   }
+}
+void i2cRead(){
+  byte error, address; //variable for error and I2C address
+  int nDevices;
+
+  Serial.println("Scanning...");
+
+  nDevices = 0;
+  for (address = 1; address < 127; address++ )
+  {
+    // The i2c_scanner uses the return value of
+    // the Write.endTransmisstion to see if
+    // a device did acknowledge to the address.
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+
+    if (error == 0)
+    {
+      Serial.print("I2C device found at address 0x");
+      if (address < 16)
+        Serial.print("0");
+      Serial.print(address, HEX);
+      Serial.println("  !");
+      nDevices++;
+    }
+    else if (error == 4)
+    {
+      Serial.print("Unknown error at address 0x");
+      if (address < 16)
+        Serial.print("0");
+      Serial.println(address, HEX);
+    }
+  }
+  if (nDevices == 0)
+    Serial.println("No I2C devices found\n");
+  else
+    Serial.println("done\n");
+
+  delay(5000); // wait 5 seconds for the next I2C scan
 }
