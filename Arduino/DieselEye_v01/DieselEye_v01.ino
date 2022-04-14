@@ -1,6 +1,6 @@
 #include <SPI.h>
 #include <stdint.h>
-#include <mpu6050.h>
+#include <MPU6050_tockn.h>
 #include <Wire.h>
 //#include <SoftwareSerial.h>
 //SoftwareSerial Serial(PIN_PC7, PIN_PC6); // RX, TX
@@ -93,16 +93,16 @@ MPU6050 mpu6050(Wire);
 
 void setup() {
   Serial.begin(9600);
-  //Serial.println("----------------------Program Start-------------------------,");
+  Serial.println("----------------------Program Start-------------------------,");
   SPI.begin();
 
   Wire.begin();
   mpu6050.begin();
   mpu6050.calcGyroOffsets(true);
-  ////////////////////tdc7200 pin direction////////////////
+  ////////////////////tdc7200 pin direction///////////
   pinMode(selectTDC7200, OUTPUT);
   pinMode(enableTDC7200, OUTPUT);
-  /////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////
 
   ///////////////////TDC1000 PIN DIRECTION////////////
   pinMode(PIN_TDC1000_ENABLE, OUTPUT);
@@ -113,7 +113,7 @@ void setup() {
   pinMode(PIN_TDC1000_OSC_ENABLE, OUTPUT);
   /////////////////////////////////////////////////////
 
-  //////////////////////////initializing pins/////////////////////////
+  //////////////////////////initializing pins//////////
   //  digitalWrite(PIN_VDD1, HIGH);
   digitalWrite(PIN_TDC1000_ENABLE, HIGH);
   digitalWrite(PIN_TDC1000_RESET, HIGH);
@@ -121,7 +121,7 @@ void setup() {
   digitalWrite(PIN_TDC1000_RESET, LOW);
   digitalWrite(PIN_TDC1000_CHSEL, LOW);
   digitalWrite(PIN_TDC1000_OSC_ENABLE, HIGH);
-  ///////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
 
   digitalWrite(selectTDC7200, HIGH); //Select is Active low, set to high @ initialise
   digitalWrite(enableTDC7200, LOW); //Enable is Active high, set to low @ initialise
@@ -129,7 +129,7 @@ void setup() {
   digitalWrite(enableTDC7200, HIGH);
   delay(dt);
 
-  /////////////////////////////initialize tdc1000//////////////////////////
+  //////////////////////initialize tdc1000/////////////
   TDC1000Write(CONFIG_0, 0X44);
   TDC1000Write(CONFIG_1, 0X41); //41
   TDC1000Write(CONFIG_2, 0X0);
@@ -151,7 +151,7 @@ void setup() {
   val7 = TDC1000Read(ERROR_FLAGS);
   val8 = TDC1000Read(TIMEOUT);
   val9 = TDC1000Read(CLOCK_RATE);
-  ////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
 
 }
 
