@@ -1,0 +1,62 @@
+[
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "C:\\Users\\KURO\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.5\\cores\\arduino"
+  },
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "C:\\Users\\KURO\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.5\\variants\\eightanaloginputs"
+  },
+  {
+    "Sourcefile": "c:\\Users\\KURO\\Documents\\GitHub\\workspace\\Arduino\\build\\sketch\\DieselEye_v01.ino.cpp",
+    "Include": "SPI.h",
+    "Includepath": "C:\\Users\\KURO\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.5\\libraries\\SPI\\src"
+  },
+  {
+    "Sourcefile": "c:\\Users\\KURO\\Documents\\GitHub\\workspace\\Arduino\\build\\sketch\\DieselEye_v01.ino.cpp",
+    "Include": "MPU6050_tockn.h",
+    "Includepath": "C:\\Users\\KURO\\Documents\\Arduino\\libraries\\MPU6050_tockn-master\\src"
+  },
+  {
+    "Sourcefile": "c:\\Users\\KURO\\Documents\\GitHub\\workspace\\Arduino\\build\\sketch\\DieselEye_v01.ino.cpp",
+    "Include": "Wire.h",
+    "Includepath": "C:\\Users\\KURO\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.5\\libraries\\Wire\\src"
+  },
+  {
+    "Sourcefile": "c:\\Users\\KURO\\Documents\\GitHub\\workspace\\Arduino\\build\\sketch\\DieselEye_v01.ino.cpp",
+    "Include": "mcp2515.h",
+    "Includepath": "C:\\Users\\KURO\\Documents\\Arduino\\libraries\\arduino-mcp2515-master"
+  },
+  {
+    "Sourcefile": "c:\\Users\\KURO\\Documents\\GitHub\\workspace\\Arduino\\build\\sketch\\DieselEye_v01.ino.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\KURO\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.5\\libraries\\SPI\\src\\SPI.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\KURO\\Documents\\Arduino\\libraries\\MPU6050_tockn-master\\src\\MPU6050_tockn.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\KURO\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.5\\libraries\\Wire\\src\\Wire.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\KURO\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.5\\libraries\\Wire\\src\\utility\\twi.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\KURO\\Documents\\Arduino\\libraries\\arduino-mcp2515-master\\mcp2515.cpp",
+    "Include": "",
+    "Includepath": null
+  }
+]

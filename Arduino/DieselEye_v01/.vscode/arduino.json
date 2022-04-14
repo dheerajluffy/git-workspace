@@ -1,6 +1,7 @@
 {
-    "port": "COM7",
+    "port": "COM10",
     "configuration": "cpu=atmega328",
     "board": "arduino:avr:nano",
-    "sketch": "DieselEye_v01.ino"
+    "sketch": "DieselEye_v01.ino",
+    "output": "../build"
 }
