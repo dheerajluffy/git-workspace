@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <MPU6050_tockn.h>
 #include <Wire.h>
+#include <math.h>
+#include <mcp2515.h>
 //#include <SoftwareSerial.h>
 //SoftwareSerial Serial(PIN_PC7, PIN_PC6); // RX, TX
 #define PIN_TDC1000_OSC_ENABLE    (A0)
@@ -90,6 +92,8 @@ int enableTDC7200 = 5;//49;
 #define PIN_TDC1000_ERRB      (4)
 
 MPU6050 mpu6050(Wire);
+MCP2515 mcp2515(7);
+struct can_frame canMsg1;
 
 void setup() {
   Serial.begin(9600);
@@ -173,12 +177,12 @@ void loop() {
   //tdc1000configRead(); //uncomment to print reg config of tdc1000
   //tdc7200configRead(); //uncomment to print reg config of tdc7200
  // measure(10); //uncoment to print Tof parameters
-  claculateTof();
-  i2cRead();
-  // mpu6050.update();
-  // Serial.print("angleX : ");
-  // Serial.print(mpu6050.getAngleX());
-  // delay(500);
+  mpu6050.update();
+  calculateTof();
+  //i2cRead();
+  Serial.print("angleX : ");
+  Serial.println(mpu6050.getAngleX());
+
 }
 
 void measure( int calibPeriod ) {
@@ -187,11 +191,10 @@ void measure( int calibPeriod ) {
   double time1 = spiReadReg24(0X10);
   double time2 = spiReadReg24(0X12);
   double clkcount = spiReadReg24(0X11);
-
   String payload = ("c1:" + String(cal1) + "," + "c2:" + String(cal2) + "," + "t1:" + String(time1) + "," + "t2:" + String(time2) + "," + "clkc:" + String(clkcount) + ",.");
   Serial.println(payload);
 }
-void claculateTof() {
+void calculateTof() {
   double clkperiod = 125 * pow(10, -9);
   double calcount = 0;
   double normlsb = 0;
@@ -212,6 +215,19 @@ void claculateTof() {
   float a = (S1.substring(0, 3)).toFloat();
   float height = ((a * 1300) / 2) * 0.1;
   Serial.println(String(height) + "MM");
+
+  canMsg1.can_id  = 0x0F6;
+  canMsg1.can_dlc = 8;
+  canMsg1.data[0] = TOF1;
+  canMsg1.data[1] = height;
+  canMsg1.data[2] = mpu6050.getAngleX();
+  canMsg1.data[3] = mpu6050.getAngleY();
+  canMsg1.data[4] = mpu6050.getAngleZ();
+  canMsg1.data[5] = mpu6050.getAccX();
+  canMsg1.data[6] = mpu6050.getAccX();
+  canMsg1.data[7] = mpu6050.getAccX();
+  mcp2515.sendMessage(&canMsg1);
+
 }
 
 
