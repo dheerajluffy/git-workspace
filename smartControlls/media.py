@@ -9,7 +9,7 @@ hands =mpHands.Hands()
 
 while True:
     success , img = cap.read()
-    imgGray=cv2.cvtColor(img,cv2.COLOR_BAYER_BG2GRAY)
+    imgGray=cv2.cvtColor(img,cv2.COLOR_BAYER_BG2RGB)
     results = hands.process(imgGray)
     cv2.imshow("Image", img)
     cv2.waitkey(1)
